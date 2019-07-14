@@ -5,73 +5,121 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="stylesheet" type="text/css" href="style.css">
 	    <script type="text/javascript" src="myjs.js"></script>
+		<!--<script type="text/javascript" src="execute.js"></script>-->
+		<script type="text/javascript" src="../Libraries/FileSaver.js"></script>
+	<script>
+// Get the modal
+function about(){ 
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+}
+</script>	  
 </head>
-<body >
+<body onload="fileonload(1)">
 	<div id="topTab" name="topTab" style="width:100%;height:4%;background-color:black;padding:2px;">
 <div class="dropdown">
-  <button onclick="myFunction()" class="dropbtn">File</button>
+  <button onclick="myFunction()" class="dropbtn" id="file">File</button>
   <div id="myDropdown" class="dropdown-content">
-     <a href="javascript:void">New</a>
-  <a href="javascript:void">Open</a>
-  <a href="javascript:void">Close</a>
-  <a href="javascript:void">Close All</a>
-  <a href="javascript:void">Save</a>
-  <a href="javascript:void">Save As</a>
-  <a href="javascript:void">Exit</a>
+     <a href="javascript:myfunctionlist('','')" >New</a>
+  <a href="javascript:open_window()">Open</a>
+  <input type="file" id="inp_file" style="display: none" onchange="setinputfileintextarea()">
+  <a href="javascript:close_fun()">Close</a>
+  <a href="javascript:closeAll_fun()">Close All</a>
+  <a href="javascript:saveAs_fun()">Save</a>
+  <a href="javascript:saveAs_fun()">Save As</a>
+  <a href="javascript:exit_window()">Exit</a>
 
   </div>
 </div>
 
 <div class="dropdown">
-  <button onclick="myFunction1()" class="dropbtn1">Edit</button>
+  <button onclick="myFunction1()" class="dropbtn1" id="edit">Edit</button>
   <div id="myDropdown1" class="dropdown-content1">
-  <a href="Undo">Undo</a>
-  <a href="Redo">Redo</a>
-  <a href="Cut">Cut</a>
-  <a href="Copy">Copy</a>
-  <a href="Paste">Paste</a>
-  <a href="Select All">Select All</a>
+  <a href="javascript:undo_fun()">Undo</a>
+  <a href="javascript:redo_fun()">Redo</a>
+  <a href="javascript:cut()">Cut</a>
+  <a href="javascript:copy()">Copy</a>
+  <a href="javascript:paste()">Paste</a>
+  <a href="javascript:selectAll()">Select All</a>
 
   </div>
 </div>
 <div class="dropdown">
-  <button onclick="myFunction2()" class="dropbtn2">Run</button>
+  <button onclick="myFunction2()" class="dropbtn2" id="run">Run</button>
   <div id="myDropdown2" class="dropdown-content2">
-  <a href="volvo">Assemble</a>
-  <a href="saab">Run</a>
-  <a href="opel">Step</a>
-  <a href="audi">Reset</a>
-<a href="audi">Clear BreakPoints</a>
-<a href="audi">Toggle BreakPoints</a>
+  <a href="javascript:assemblerlistner()"  id="Run_assemble">Assemble</a>
+  <div class="assemblerclass">
+  <a href="javascript:void" id="Run_run" style="cursor: none;opacity: 0.3;">Run</a>
+  <a href="javascript:void" id="Run_step" style="cursor: none;opacity: 0.3;">Step</a>
+  <a href="javascript:void" id="Run_reset" style="cursor: none;opacity: 0.3;">Reset</a>
+<a href="javascript:void" id="Run_clearBreakPoints" style="cursor: none;opacity: 0.3;">Clear BreakPoints</a>
+<a href="javascript:void" id="Run_toggleBreakPoints" style="cursor: none;opacity: 0.3;">Toggle BreakPoints</a>
+</div>
   </div>
 </div>
 <div class="dropdown">
-  <button onclick="myFunction3()" class="dropbtn3">Help</button>
+  <button onclick="myFunction3()" class="dropbtn3" id="help">Help</button>
   <div id="myDropdown3" class="dropdown-content3">
-  <a href="volvo">Help</a>
-  <a href="saab">About</a>
+  <a href="javascript:void">Help</a>
+  <a href="javascript:about()" id="myBtn">About</a>
 
+
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+             <p>MipsParser Version 1.0 Build 100</p>
+								<p>Designed By-</p>
+								<p>Lakshya Jain and Rishikesh Dwivedi</p><br>
+								<p>MipsParser is a MIPS assembler and a run time simulator</p>
   </div>
-</div>
 
+</div>
 	</div>
+</div>
+	<br/>
+
 	<br/>
 		<div class="menu">
 
-		<a href="index.htm" id="menu_editor" class="link_decor">Editor</a>
-		<a href="execute.html" id="menu_execute" class="link_decor">Execute</a>
-		<a href="codes.htm" id="menu_codes" class="link_decor">Codes</a>
-		<a href="help.htm" id="menu_help" class="link_decor">Help</a>
+		<a href="index.htm" id="menu_editor" class="link_decor">Editor</a><!--
+    --><a href="execute.html" id="menu_execute" class="link_decor">Execute</a><!--
+    --><a href="codes.htm" id="menu_codes" class="link_decor">Codes</a><!--
+    --><a href="help.htm" id="menu_help" class="link_decor">Help</a>
 	</div>
 
-	<div style="width: 100%;height:20em;border:1px solid black;">
-		<textarea style="width: 100%;height:100%;border:none;" oninput="textareachanged(1)" id="mytext">
+	<div style="width: 100%;height:20em;border-top:30px solid #84a1cf;border-bottom: 5px solid #84a1cf;border-left:5px solid #84a1cf;border-right:5px solid #84a1cf;">
+		<div style="display: inline-block;position:relative;top:-22px;left:0px;" id="mydiv">
+	</div><textarea style="width: 100%;height:100%;border:none;position: relative;
+    top: -22px;" oninput="textareachanged(1)" id="mytext">
 
 	</textarea>
 
 	</div>
-		<div style="display: inline-block; overflow-x: scroll;" id="mydiv">
-	</div>
+		
 	<div class="bottom_menu">
 		<button id="bottom_Run">Run Input/Output</button>
 		<button id="bottom_parser">Parser Message</button>
