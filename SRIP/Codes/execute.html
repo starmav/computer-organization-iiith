@@ -1,0 +1,488 @@
+<html>
+<head>
+	<title>MIPS2</title>
+	
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="style.css">
+	    <script type="text/javascript" src="myjs.js"></script>
+	    <script type="text/javascript" src="codes.js"></script>
+	    <script type="text/javascript" src="about.js"></script>
+	    <script type="text/javascript" src="editor.js"></script>
+	    <script type="text/javascript" src="help.js"></script>
+		<script type="text/javascript" src="execute.js"></script>
+		<script type="text/javascript" src="execute2.js"></script>
+		<script type="text/javascript" src="../Libraries/FileSaver.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script>
+
+
+$(document).ready(function(){
+$('#mydiv1').hide();
+$('#mydiv3').hide();
+$('#mydiv2').hide();
+$('#mydiv4').show();
+});
+
+
+
+</script>	  
+</head>
+<body onload="fileonload(1)">
+	<div id="topTab" name="topTab" style="width:100%;height:4%;background-color:black;padding:2px;">
+<div class="dropdown">
+  <button onclick="myFunction()" class="dropbtn" id="file">File</button>
+  <div id="myDropdown" class="dropdown-content">
+     <a href="javascript:myfunctionlist('','')" >New</a>
+  <a href="javascript:open_window()">Open</a>
+  <input type="file" id="inp_file" style="display: none" onchange="setinputfileintextarea()">
+  <a href="javascript:close_fun()">Close</a>
+  <a href="javascript:closeAll_fun()">Close All</a>
+  <a href="javascript:saveAs_fun()">Save</a>
+  <a href="javascript:saveAs_fun()">Save As</a>
+  <a href="javascript:exit_window()">Exit</a>
+
+  </div>
+</div>
+
+<div class="dropdown">
+  <button onclick="myFunction1()" class="dropbtn1" id="edit">Edit</button>
+  <div id="myDropdown1" class="dropdown-content1">
+  <a href="javascript:undo_fun()">Undo</a>
+  <a href="javascript:redo_fun()">Redo</a>
+  <a href="javascript:cut()">Cut</a>
+  <a href="javascript:copy()">Copy</a>
+  <a href="javascript:paste()">Paste</a>
+  <a href="javascript:selectAll()">Select All</a>
+
+  </div>
+</div>
+<div class="dropdown">
+  <button onclick="myFunction2()" class="dropbtn2" id="run">Run</button>
+  <div id="myDropdown2" class="dropdown-content2">
+  <a href="javascript:assemblerlistner()"  id="Run_assemble">Assemble</a>
+  <div class="assemblerclass">
+  <a href="javascript:runExecute()" id="Run_run" >Run</a>
+  <a href="javascript:stepUtil()" id="Run_step" >Step</a>
+  <a href="javascript:void" id="Run_reset" >Reset</a>
+<a href="javascript:void" id="Run_clearBreakPoints" >Clear BreakPoints</a>
+<a href="javascript:void" id="Run_toggleBreakPoints" >Toggle BreakPoints</a>
+</div>
+  </div>
+</div>
+<div class="dropdown">
+  <button onclick="myFunction3()" class="dropbtn3" id="help">Help</button>
+  <div id="myDropdown3" class="dropdown-content3">
+  <a href="javascript:help()" id="help">Help</a>
+  <a href="javascript:about()" id="myBtn">About</a>
+
+
+
+	</div>
+</div>
+	<br/>
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+             <p>MipsParser Version 1.0 Build 100</p>
+								<p>Designed By-</p>
+								<p>Lakshya Jain and Rishikesh Dwivedi</p><br>
+								<p>MipsParser is a MIPS assembler and a run time simulator</p>
+  </div>
+
+</div>
+	<br/>
+		<div class="menu">
+
+		<a href="javascript:editor()" id="menu_editor" class="link_decor">Editor</a><!--
+    --><a href="javascript:execute()" id="menu_execute" class="link_decor">Execute</a><!--
+    --><a href="javascript:code()" id="menu_codes" class="link_decor">Codes</a><!--
+    --><a href="javascript:help()" id="menu_help" class="link_decor">Help</a>
+	</div>
+
+<div  id ="mydiv1" style="width: 100%;height:20em;overflow-y:scroll;border-top:30px solid #84a1cf;border-bottom: 5px solid #84a1cf;border-left:5px solid #84a1cf;border-right:5px solid #84a1cf;">
+
+	</div>	
+	<div  id ="mydiv2" style="width: 100%;height:20em;border-top:30px solid #84a1cf;border-bottom: 5px solid #84a1cf;border-left:5px solid #84a1cf;border-right:5px solid #84a1cf;">
+		<div style="display: inline-block;position:relative;top:-22px;left:0px;" id="mydiv">
+	</div><textarea style="width: 100%;height:100%;border:none;position: relative;
+    top: -22px;" oninput="textareachanged(1)" id="mytext">
+
+	</textarea>
+
+	</div>
+
+
+    <div class="wrapper_execute" style="width:100%;height:24em;" id="mydiv4" >
+        <div class="box1" style="background-color:#f4f5f7;overflow-x:auto;">
+            <img src="image.jfif" alt="logo" width="15em" height="15em"
+                style="background-color: white;border: 1px solid black;">
+            Text Segment
+            <table id="text_table" style="background-color: white;width:100%;visibility: hidden;">
+                <tr>
+                    <th>Bkpt</th>
+                    <th>Address</th>
+                    <th>Source</th>
+                </tr>
+            </table>
+        </div>
+
+        <div class="box2" >
+            <div style="position: relative;top:170px;height: 100%;">
+                <button id="execute_step" onclick="stepUtil()" class="execute_btn"
+                    style="cursor: none; opacity: 0.5;">Step</button><br/><br/>
+                <button id="execute_run" onclick="runExecute()" class="execute_btn"
+                    style="cursor: none; opacity: 0.5;">Run</button>
+            </div>
+
+        </div>
+        <div class="box3" style="background-color: #f4f5f7;overflow-x:auto;">
+            <img src="image.jfif" alt="logo" width="15em" height="15em"
+                style="background-color: white;border: 1px solid black;">
+            Registers
+            <table id="registor_table" style="width:100%;background-color: white">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Num..</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tr>
+                    <td>$zero</td>
+                    <td>0</td>
+                    <td id="$zero">0</td>
+                </tr>
+                <tr>
+                    <td>$at</td>
+                    <td>1</td>
+                    <td id="$at">0</td>
+                </tr>
+                <tr>
+                    <td>$v0</td>
+                    <td>2</td>
+                    <td id="$v0">0</td>
+                </tr>
+                <tr>
+                    <td>$v1</td>
+                    <td>3</td>
+                    <td id="$v1">0</td>
+                </tr>
+                <tr>
+                    <td>$a0</td>
+                    <td>4</td>
+                    <td id="$a0">0</td>
+                </tr>
+                <tr>
+                    <td>$a1</td>
+                    <td>5</td>
+                    <td id="$a1">0</td>
+                </tr>
+                <tr>
+                    <td>$a2</td>
+                    <td>6</td>
+                    <td id="$a2">0</td>
+                </tr>
+                <tr>
+                    <td>$a3</td>
+                    <td>7</td>
+                    <td id="$a3">0</td>
+                </tr>
+                <tr>
+                    <td>$t0</td>
+                    <td>8</td>
+                    <td id="$t0">0</td>
+                </tr>
+                <tr>
+                    <td>$t1</td>
+                    <td>9</td>
+                    <td id="$t1">0</td>
+                </tr>
+                <tr>
+                    <td>$t2</td>
+                    <td>10</td>
+                    <td id="$t2">0</td>
+                </tr>
+                <tr>
+                    <td>$t3</td>
+                    <td>11</td>
+                    <td id="$t3">0</td>
+                </tr>
+                <tr>
+                    <td>$t4</td>
+                    <td>12</td>
+                    <td id="$t4">0</td>
+                </tr>
+                <tr>
+                    <td>$t5</td>
+                    <td>13</td>
+                    <td id="$t5">0</td>
+                </tr>
+                <tr>
+                    <td>$t6</td>
+                    <td>14</td>
+                    <td id="$t6">0</td>
+                </tr>
+                <tr>
+                    <td>$t7</td>
+                    <td>15</td>
+                    <td id="$t7">0</td>
+                </tr>
+                <tr>
+                    <td>$s0</td>
+                    <td>16</td>
+                    <td id="$s0">0</td>
+                </tr>
+                <tr>
+                    <td>$s1</td>
+                    <td>17</td>
+                    <td id="$s1">0</td>
+                </tr>
+                <tr>
+                    <td>$s2</td>
+                    <td>18</td>
+                    <td id="$s2">0</td>
+                </tr>
+                <tr>
+                    <td>$s3</td>
+                    <td>19</td>
+                    <td id="$s3">0</td>
+                </tr>
+                <tr>
+                    <td>$s4</td>
+                    <td>20</td>
+                    <td id="$s4">0</td>
+                </tr>
+                <tr>
+                    <td>$s5</td>
+                    <td>21</td>
+                    <td id="$s5">0</td>
+                </tr>
+                <tr>
+                    <td>$s6</td>
+                    <td>22</td>
+                    <td id="$s6">0</td>
+                </tr>
+                <tr>
+                    <td>$s7</td>
+                    <td>23</td>
+                    <td id="$s7">0</td>
+                </tr>
+                <tr>
+                    <td>$t8</td>
+                    <td>24</td>
+                    <td id="$t8">0</td>
+                </tr>
+                <tr>
+                    <td>$t9</td>
+                    <td>25</td>
+                    <td id="$t9">0</td>
+                </tr>
+                <tr>
+                    <td>$k0</td>
+                    <td>26</td>
+                    <td id="$k0">0</td>
+                </tr>
+                <tr>
+                    <td>$k1</td>
+                    <td>27</td>
+                    <td id="$k1">0</td>
+                </tr>
+                <tr>
+                    <td>$gp</td>
+                    <td>28</td>
+                    <td id="$gp">0</td>
+                </tr>
+                <tr>
+                    <td>$sp</td>
+                    <td>29</td>
+                    <td id="sp">0</td>
+                </tr>
+                <tr>
+                    <td>$fp</td>
+                    <td>30</td>
+                    <td id="$fp">0</td>
+                </tr>
+                <tr>
+                    <td>$ra</td>
+                    <td>31</td>
+                    <td id="$ra">0</td>
+                </tr>
+                <tr>
+                    <td>$hi</td>
+                    <td>32</td>
+                    <td id="$hi">0</td>
+                </tr>
+                <tr>
+                    <td>$lo</td>
+                    <td>33</td>
+                    <td id="$lo">0</td>
+                </tr>
+                <tr>
+                    <td>$pc</td>
+                    <td>34</td>
+                    <td id="pc">0</td>
+                </tr>
+            </table>
+        </div>
+        <div class="box4" style="background-color: #f4f5f7;overflow-y: scroll;">
+            <img src="image.jfif" alt="logo" width="15em" height="15em"
+                style="background-color: white;border: 1px solid black;">
+            Data Segment
+            <table id="data_table" style="visibility:hidden;">
+                <tr>
+                    <th>Address</th>
+                    <th>Value(+0)</th>
+                    <th>Value(+4)</th>
+                    <th>Value(+8)</th>
+                    <th>Value(+16)</th>
+                    <th>Value(+20)</th>
+                </tr>
+                <tr>
+                    <td>268435456</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>268435480</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>268435504</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>268435528</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>268435552</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>268435576</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>268435600</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>268435624</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>268435648</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>268435672</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>268435696</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>268435720</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>268435744</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>268435768</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>268435792</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                </tr>
+
+            </table>
+        </div>
+    </div>
+
+    <br>
+
+<div  id ="mydiv3" style="width: 100%;height:20em;border-top:30px solid #84a1cf;border-bottom: 5px solid #84a1cf;border-left:5px solid #84a1cf;border-right:5px solid #84a1cf;">
+
+	</div>			
+	<div class="bottom_menu">
+		<button id="bottom_Run">Run Input/Output</button>
+		<button id="bottom_parser">Parser Message</button>
+		<div class="wrapper">
+			<div style="width:100%;height:10em;border:1px solid black;">
+				<button id="bottom_clear" class="center_feild">Clear</button>
+			</div>
+			<div style="width:100%;height:10em;border:1px solid black;">
+				<textarea style="width: 100%;height:100%;border:none;" id="parsertext">
+
+			</textarea>
+			</div>
+		</div>
+		<br>
+	</div>
+</body>
+</html>
